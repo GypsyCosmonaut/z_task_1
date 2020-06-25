@@ -1,0 +1,30 @@
+version: '3.3'
+
+networks:
+  overlay_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.0.0/24
+
+services:
+  s_app:
+    build: ./docker/app
+    image: s_app:latest
+    container_name: s_app
+    networks:
+      overlay_network:
+        ipv4_address: 10.0.0.2
+    ports:
+      - "8000:8080"
+
+  s_redis:
+    build: ./docker/redis
+    image: s_redis:latest
+    container_name: s_redis
+    networks:
+      overlay_network:
+        ipv4_address: 10.0.0.3
+    volumes:
+      - "/data:/data"
